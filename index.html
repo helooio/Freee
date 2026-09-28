@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#050806">
+<title>PUBG KING MOOD - اترهيب</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
+
+:root{
+  --green:#5ee7ff;
+  --green2:#248cff;
+  --lime:#8b7cff;
+  --gold:#c9a7ff;
+  --bg:#03040c;
+  --bg2:#090b1b;
+  --panel:rgba(10,12,30,.88);
+  --panel2:rgba(17,19,45,.74);
+  --line:rgba(94,231,255,.18);
+  --line2:rgba(139,124,255,.20);
+  --text:#f5fff8;
+  --muted:rgba(225,245,231,.55);
+  --shadow:0 25px 80px rgba(0,0,0,.58);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Tajawal','Segoe UI',sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at 8% 4%,rgba(94,231,255,.13),transparent 26%),
+    radial-gradient(circle at 94% 16%,rgba(139,124,255,.13),transparent 25%),
+    radial-gradient(circle at 50% 100%,rgba(36,140,255,.09),transparent 35%),
+    linear-gradient(145deg,#010208,#080b1c 52%,#03040c);
+}
+
+body::before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom,#000,transparent 88%);
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  width:70vw;height:70vw;
+  max-width:700px;max-height:700px;
+  right:-35vw;top:8%;
+  border-radius:50%;
+  border:1px solid rgba(57,255,136,.06);
+  box-shadow:0 0 120px rgba(57,255,136,.035);
+  animation:radar 13s linear infinite;
+  pointer-events:none;z-index:0;
+}
+@keyframes radar{to{transform:rotate(360deg)}}
+
+#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ===== TOP NOTICE ===== */
+#toast{
+  position:fixed;
+  top:13px;left:50%;
+  transform:translateX(-50%) translateY(-170px);
+  width:min(455px,calc(100vw - 22px));
+  z-index:9999;
+  padding:11px 12px;
+  border:1px solid rgba(57,255,136,.25);
+  border-radius:19px;
+  background:rgba(3,10,6,.94);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  box-shadow:0 18px 70px rgba(0,0,0,.7),0 0 35px rgba(57,255,136,.08);
+  display:flex;align-items:center;gap:11px;
+  opacity:0;
+  transition:transform .7s cubic-bezier(.2,1.35,.3,1),opacity .35s ease;
+}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+#toast.hide{transform:translateX(-50%) translateY(-170px);opacity:0}
+
+.toast-icon{
+  width:45px;height:45px;flex:0 0 45px;
+  border-radius:14px;
+  display:grid;place-items:center;
+  font-size:20px;
+  background:linear-gradient(145deg,rgba(57,255,136,.17),rgba(244,201,93,.10));
+  border:1px solid rgba(57,255,136,.25);
+  box-shadow:inset 0 0 20px rgba(57,255,136,.06);
+  animation:toastPulse 1.8s ease-in-out infinite;
+}
+@keyframes toastPulse{50%{transform:translateY(-2px) scale(1.04);box-shadow:0 0 25px rgba(57,255,136,.18)}}
+
+.toast-text{flex:1;text-align:right}
+.toast-title{
+  font-size:12px;font-weight:900;
+  color:#fff;
+}
+.toast-sub{margin-top:3px;font-size:9px;color:var(--muted)}
+.toast-badge{
+  padding:6px 9px;border-radius:9px;
+  font-size:8px;font-weight:900;
+  color:#041108;
+  background:linear-gradient(135deg,var(--green),var(--lime));
+  box-shadow:0 0 18px rgba(57,255,136,.18);
+  white-space:nowrap;
+}
+
+/* ===== SIDE BRAND ===== */
+.side-line{
+  position:fixed;right:18px;top:17%;
+  height:58%;width:1px;z-index:4;
+  background:linear-gradient(to bottom,transparent,var(--green) 20%,var(--gold) 52%,var(--green) 80%,transparent);
+  box-shadow:0 0 13px rgba(57,255,136,.35);
+}
+.side-avatar{
+  position:absolute;top:-29px;left:50%;
+  transform:translateX(-50%);
+  width:56px;height:56px;border-radius:18px;padding:2px;
+  background:linear-gradient(145deg,var(--green),var(--gold),var(--green));
+  box-shadow:0 0 30px rgba(57,255,136,.22);
+}
+.side-avatar::after{
+  content:"";position:absolute;inset:-7px;
+  border:1px solid rgba(57,255,136,.12);
+  border-radius:23px;animation:ring 2.8s infinite;
+}
+@keyframes ring{50%{transform:scale(1.12);opacity:.3}100%{transform:scale(1);opacity:1}}
+.side-avatar img{width:100%;height:100%;object-fit:cover;border-radius:15px;display:block}
+
+/* ===== LAYOUT ===== */
+.shell{
+  position:relative;z-index:1;
+  max-width:620px;margin:auto;
+  padding:24px 13px 45px;
+}
+.glass{
+  background:linear-gradient(145deg,rgba(10,21,13,.9),rgba(3,9,5,.82));
+  border:1px solid var(--line);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.035);
+  backdrop-filter:blur(25px);
+  -webkit-backdrop-filter:blur(25px);
+}
+
+/* ===== HEADER ===== */
+.brand-head{
+  text-align:center;
+  margin:8px 0 15px;
+}
+.brand-kicker{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 10px;border-radius:8px;
+  border:1px solid rgba(244,201,93,.18);
+  background:rgba(244,201,93,.055);
+  color:#f8dda0;
+  font-size:8px;font-weight:900;
+  letter-spacing:2px;
+}
+.brand-kicker i{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px var(--green);
+  animation:live 1.3s infinite;
+}
+@keyframes live{50%{opacity:.3;transform:scale(.65)}}
+.brand-title{
+  font-size:29px;font-weight:900;
+  margin-top:8px;
+  letter-spacing:-.8px;
+  background:linear-gradient(90deg,#fff,var(--green),#eaffcf);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.brand-sub{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* ===== APP CARD ===== */
+.apps{display:grid;gap:13px}
+
+.app-card{
+  position:relative;
+  overflow:hidden;
+  border-radius:29px;
+  padding:18px;
+}
+.app-card::before{
+  content:"";
+  position:absolute;
+  width:290px;height:290px;
+  right:-160px;top:-180px;
+  background:radial-gradient(circle,rgba(57,255,136,.16),transparent 68%);
+  animation:orb 6s ease-in-out infinite;
+}
+.app-card::after{
+  content:"";
+  position:absolute;
+  left:-180px;bottom:-190px;
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(244,201,93,.08),transparent 68%);
+}
+@keyframes orb{50%{transform:scale(1.16) translate(-7px,8px);opacity:.75}}
+
+.app-top{
+  display:flex;align-items:center;gap:14px;
+  position:relative;z-index:2;
+}
+.app-icon{
+  width:91px;height:91px;flex:0 0 91px;
+  padding:2px;border-radius:26px;
+  background:linear-gradient(145deg,var(--green),#0a9c4d,var(--gold));
+  box-shadow:0 12px 40px rgba(57,255,136,.16),0 0 60px rgba(57,255,136,.08);
+  animation:iconFloat 4s ease-in-out infinite;
+  position:relative;
+}
+.app-icon::before{
+  content:"";position:absolute;inset:-6px;
+  border-radius:31px;
+  border:1px solid rgba(57,255,136,.14);
+  animation:iconRing 3s infinite;
+}
+.app-icon img{
+  width:100%;height:100%;
+  object-fit:cover;border-radius:23px;display:block;
+}
+@keyframes iconFloat{50%{transform:translateY(-6px) rotate(-1deg)}}
+@keyframes iconRing{50%{transform:scale(1.08);opacity:.3}}
+
+.app-info{min-width:0}
+.status{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 9px;border-radius:8px;
+  color:#9affbe;
+  background:rgba(57,255,136,.06);
+  border:1px solid rgba(57,255,136,.19);
+  font-size:8px;font-weight:900;
+}
+.status i{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+  animation:statusBlink 1.2s infinite;
+}
+@keyframes statusBlink{0%,100%{opacity:1}50%{opacity:.22}}
+.app-name{
+  font-size:20px;font-weight:900;
+  margin-top:7px;line-height:1.25;
+}
+.app-name small{
+  display:block;
+  font-size:10px;
+  color:#a9bbaa;
+  font-weight:700;
+  margin-top:3px;
+}
+.app-desc{font-size:9px;color:var(--muted);margin-top:4px}
+
+.app-meta{
+  display:flex;gap:7px;flex-wrap:wrap;
+  margin-top:12px;position:relative;z-index:2;
+}
+.meta{
+  font-size:8px;color:#cfead7;
+  padding:6px 9px;border-radius:9px;
+  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.055);
+}
+.meta b{color:#fff}
+
+.install{
+  margin-top:12px;
+  position:relative;z-index:2;
+}
+.install-btn{
+  width:100%;height:56px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:17px;
+  color:#031008;
+  font-family:inherit;
+  font-size:14px;font-weight:900;
+  cursor:pointer;
+  position:relative;overflow:hidden;
+  background:linear-gradient(110deg,var(--green),#a6ff72,var(--gold),var(--green));
+  background-size:300% 100%;
+  box-shadow:0 13px 36px rgba(57,255,136,.13),inset 0 1px rgba(255,255,255,.65);
+  animation:buttonFlow 6s linear infinite;
+  transition:.2s;
+}
+@keyframes buttonFlow{to{background-position:300% 0}}
+.install-btn:hover{filter:brightness(1.07);transform:translateY(-2px)}
+.install-btn:active{transform:scale(.97)}
+.install-btn::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.38) 50%,transparent 65%);
+  transform:translateX(-120%);
+  animation:shine 3.2s infinite;
+}
+@keyframes shine{45%,100%{transform:translateX(120%)}}
+.progress{
+  position:absolute;inset:0 auto 0 0;width:0;
+  background:rgba(255,255,255,.2);
+  transition:width .05s linear;
+}
+.install-content{
+  position:relative;z-index:2;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.install-note{
+  text-align:center;font-size:8px;color:rgba(221,243,227,.43);
+  margin-top:7px;
+}
+
+/* ===== TUTORIAL ===== */
+.tutorial{
+  margin-top:14px;
+  padding:18px;
+  border-radius:20px;
+  text-decoration:none;
+  display:flex;align-items:center;gap:12px;
+  position:relative;overflow:hidden;
+  transition:.3s;
+  border:1px solid rgba(244,201,93,.18)!important;
+}
+.tutorial::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(244,201,93,.06),transparent);
+  transform:translateX(-100%);transition:.7s;
+}
+.tutorial:hover::before{transform:translateX(100%)}
+.tutorial:hover{transform:translateY(-2px);border-color:rgba(244,201,93,.38)!important}
+.tutorial-icon{
+  width:52px;height:52px;flex:0 0 52px;
+  display:grid;place-items:center;border-radius:14px;
+  font-size:20px;
+  background:linear-gradient(145deg,rgba(244,201,93,.13),rgba(57,255,136,.06));
+  border:1px solid rgba(244,201,93,.18);
+}
+.tutorial-text p{font-size:14px;font-weight:900;color:#fff;line-height:1.5}
+.tutorial-text span{display:block;font-size:11px;color:#8eeeff;margin-top:5px;font-weight:700}
+
+/* ===== CODE ===== */
+.code-panel{
+  margin-top:14px;
+  padding:17px;
+  border-radius:23px;
+}
+.code-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-bottom:11px;
+}
+.code-title{font-size:14px;font-weight:900}
+.code-live{
+  font-size:8px;font-weight:900;
+  padding:5px 8px;border-radius:8px;
+  color:#9affbe;
+  background:rgba(57,255,136,.06);
+  border:1px solid rgba(57,255,136,.16);
+}
+.code-box{
+  display:flex;align-items:center;gap:8px;
+  padding:11px;
+  border-radius:15px;
+  background:#020704;
+  border:1px solid rgba(57,255,136,.13);
+  box-shadow:inset 0 0 30px rgba(94,231,255,.025);
+}
+.code{
+  flex:1;min-width:0;
+  direction:ltr;text-align:center;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:11px;font-weight:800;
+  color:#b9ffca;
+  overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.copy-btn{
+  border:1px solid rgba(57,255,136,.17);
+  background:rgba(57,255,136,.06);
+  color:#9affbe;
+  border-radius:10px;
+  padding:8px 10px;
+  font-family:inherit;font-size:9px;font-weight:900;
+  cursor:pointer;
+}
+.copy-btn:active{transform:scale(.95)}
+.code-warning{
+  margin-top:13px;
+  text-align:center;
+  font-size:12px;
+  line-height:2;
+  color:#bfcbe7;
+  padding:8px 6px 2px;
+}
+.code-warning strong{
+  color:#fff;
+  font-size:13px;
+}
+.code-warning a{
+  color:#65e9ff;
+  font-size:14px;
+  font-weight:900;
+  text-decoration:none;
+  border-bottom:1px dashed rgba(101,233,255,.55);
+  padding-bottom:2px;
+}
+
+/* ===== SECTION ===== */
+.section{
+  margin-top:14px;
+  padding:19px;
+  border-radius:25px;
+}
+.section-title{
+  text-align:center;font-size:16px;font-weight:900;
+  margin-bottom:14px;
+}
+.section-title::after{
+  content:"";display:block;width:65px;height:2px;
+  margin:8px auto 0;
+  background:linear-gradient(90deg,transparent,var(--green),var(--gold),transparent);
+  box-shadow:0 0 13px rgba(57,255,136,.38);
+}
+.features{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+}
+.feature{
+  padding:14px;border-radius:17px;
+  background:linear-gradient(145deg,rgba(255,255,255,.04),rgba(255,255,255,.012));
+  border:1px solid rgba(255,255,255,.055);
+  transition:.3s;
+  position:relative;overflow:hidden;
+}
+.feature::before{
+  content:"";position:absolute;right:0;top:12px;
+  width:3px;height:25px;border-radius:4px;
+  background:linear-gradient(var(--green),var(--gold));
+  box-shadow:0 0 11px rgba(57,255,136,.45);
+}
+.feature:hover{transform:translateY(-3px);border-color:rgba(57,255,136,.2)}
+.feature-icon{font-size:19px}
+.feature-text{font-size:10px;color:#dcefe2;margin-top:7px;line-height:1.5}
+
+/* ===== FOOTER ===== */
+.footer{
+  text-align:center;
+  margin-top:14px;
+  padding:19px;
+  border-radius:21px;
+  font-size:10px;color:var(--muted);
+}
+.footer-logo{
+  font-size:24px;font-weight:900;
+  letter-spacing:3px;margin-bottom:5px;
+  background:linear-gradient(90deg,#fff,var(--green),var(--gold));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.footer a{color:var(--green);font-weight:900;text-decoration:none}
+
+/* ===== PARTICLES ===== */
+.particle{
+  position:fixed;border-radius:50%;
+  pointer-events:none;z-index:0;
+  animation:floatUp linear infinite;
+}
+@keyframes floatUp{
+  0%{transform:translateY(105vh) scale(0);opacity:0}
+  12%{opacity:.65}88%{opacity:.18}
+  100%{transform:translateY(-12vh) scale(1);opacity:0}
+}
+
+@media(max-width:420px){
+  .shell{padding-left:10px;padding-right:10px}
+  .brand-title{font-size:25px}
+  .app-card{padding:16px}
+  .app-icon{width:78px;height:78px;flex-basis:78px;border-radius:23px}
+  .app-icon img{border-radius:20px}
+  .app-name{font-size:18px}
+  .features{gap:7px}
+  .feature{padding:12px}
+  .side-line{display:none}
+}
+</style>
+</head>
+
+<body>
+<canvas id="bgCanvas"></canvas>
+
+<!-- TOP NOTICE -->
+<div id="toast">
+  <div class="toast-icon">🎮</div>
+  <div class="toast-text">
+    <div class="toast-title">الكود التجريبي تلاقيه تحت ↓</div>
+    <div class="toast-sub">انزل للأسفل حتى تحصل على كود التجربة</div>
+  </div>
+  <div class="toast-badge">TRIAL</div>
+</div>
+
+<!-- SIDE IMAGE -->
+<div class="side-line">
+  <div class="side-avatar">
+    <img src="https://i.ibb.co/d0crs5xd/image.png" alt="Atraheb">
+  </div>
+</div>
+
+<main class="shell">
+
+  <header class="brand-head">
+    <div class="brand-kicker"><i></i> ATRAHEB • OFFICIAL</div>
+    <h1 class="brand-title">PUBG KING MOOD</h1>
+    <div class="brand-sub">نسخ معدلة وتجربة مرتبة لأجهزة iPhone</div>
+  </header>
+
+  <section class="apps">
+
+    <!-- GLOBAL -->
+    <article class="app-card glass">
+      <div class="app-top">
+        <div class="app-icon">
+          <img src="https://i.ibb.co/Gv4KkBN8/B94172-F0-FCA3-4-AEB-BB55-D37-D3-CE50-E17.png" alt="PUBG KING MOOD Global">
+        </div>
+
+        <div class="app-info">
+          <div class="status"><i></i> SAFE • ACTIVE</div>
+          <h2 class="app-name">
+            ببجي كنك مود عالمية
+            <small>PUBG KING MOOD • GLOBAL</small>
+          </h2>
+          <div class="app-desc">الإصدار العالمي — تثبيت مباشر لأجهزة iOS</div>
+        </div>
+      </div>
+
+      <div class="app-meta">
+        <div class="meta"><b>GLOBAL</b> نسخة عالمية</div>
+        <div class="meta"><b>iOS</b> متوافق</div>
+        <div class="meta"><b>LIVE</b> متوفر الآن</div>
+      </div>
+
+      <div class="install">
+        <button class="install-btn" onclick="startDownload(this,'itms-services://?action=download-manifest&url=https://pubg-hacks.com/manifests/pubgm.plist')">
+          <div class="progress"></div>
+          <div class="install-content">
+            <span class="btnText">⬇ تثبيت ببجي العالمية</span>
+            <span class="success" style="display:none">✅ تم التجهيز</span>
+          </div>
+        </button>
+        <div class="install-note">اضغط مرة واحدة وانتظر تجهيز التثبيت</div>
+      </div>
+    </article>
+
+    <!-- KOREA -->
+    <article class="app-card glass">
+      <div class="app-top">
+        <div class="app-icon">
+          <img src="https://i.ibb.co/TxQ6mQCX/06-BA9-F07-A4-A0-4338-8460-797-EA99-FED2-B.png" alt="PUBG KING MOOD Korea">
+        </div>
+
+        <div class="app-info">
+          <div class="status"><i></i> SAFE • ACTIVE</div>
+          <h2 class="app-name">
+            ببجي كنك مود كورية
+            <small>PUBG KING MOOD • KOREA</small>
+          </h2>
+          <div class="app-desc">الإصدار الكوري — تثبيت مباشر لأجهزة iOS</div>
+        </div>
+      </div>
+
+      <div class="app-meta">
+        <div class="meta"><b>KOREA</b> نسخة كورية</div>
+        <div class="meta"><b>iOS</b> متوافق</div>
+        <div class="meta"><b>LIVE</b> متوفر الآن</div>
+      </div>
+
+      <div class="install">
+        <button class="install-btn" onclick="startDownload(this,'itms-services://?action=download-manifest&url=https://pubg-hacks.com/manifests/kr.plist')">
+          <div class="progress"></div>
+          <div class="install-content">
+            <span class="btnText">⬇ تثبيت ببجي الكورية</span>
+            <span class="success" style="display:none">✅ تم التجهيز</span>
+          </div>
+        </button>
+        <div class="install-note">اضغط مرة واحدة وانتظر تجهيز التثبيت</div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- TUTORIAL -->
+  <a href="https://t.me/atraheeb7/55" class="tutorial glass">
+    <div class="tutorial-icon">🛡️</div>
+    <div class="tutorial-text">
+      <p>حل مشكلة مطور مؤسسة غير موثوق فيه</p>
+      <span>اضغط هنا لمشاهدة الشرح بالتفصيل ←</span>
+    </div>
+  </a>
+
+  <!-- TRIAL CODE -->
+  <section class="code-panel glass">
+    <div class="code-head">
+      <div class="code-title">🔐 الكود التجريبي</div>
+      <div class="code-live">قد يتوقف بأي لحظة</div>
+    </div>
+
+    <div class="code-box">
+      <div class="code" id="trialCode">XsNYmyl5TpFIA4b72QDXkQ0SzHLdFu86</div>
+      <button class="copy-btn" onclick="copyCode()">نسخ</button>
+    </div>
+
+    <div class="code-warning">
+      إذا الكود ما اشتغل معاك يعني انتهى الكود التجريبي للاشتراك.
+      <strong>للاشتراك راسل اترهيب على</strong>
+      <a href="https://t.me/atraheb" target="_blank" rel="noopener">اترهيب</a>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section glass">
+    <h2 class="section-title">✦ مميزات الموقع ✦</h2>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🎮</div>
+        <div class="feature-text">ببجي كنك مود العالمية والكورية</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📲</div>
+        <div class="feature-text">تثبيت مباشر عبر iOS</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-text">واجهة سريعة وخفيفة على الهاتف</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔒</div>
+        <div class="feature-text">حالة SAFE متحركة لكل تطبيق</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🎁</div>
+        <div class="feature-text">كود تجريبي متاح من داخل الموقع</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💬</div>
+        <div class="feature-text">تواصل مباشر مع اترهيب للاشتراك</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer glass">
+    <div class="footer-logo">ATRAHEB</div>
+    <div>تم التطوير والبرمجة بواسطة <a href="https://t.me/atraheb" target="_blank" rel="noopener">اترهيب</a></div>
+  </footer>
+
+</main>
+
+<script>
+/* ===== TOP NOTICE ===== */
+window.addEventListener('load',()=>{
+  const toast=document.getElementById('toast');
+  setTimeout(()=>toast.classList.add('show'),450);
+  setTimeout(()=>{
+    toast.classList.remove('show');
+    toast.classList.add('hide');
+  },4300);
+});
+
+/* ===== BACKGROUND CANVAS ===== */
+const canvas=document.getElementById('bgCanvas');
+const ctx=canvas.getContext('2d');
+let stars=[],W,H;
+
+function resize(){
+  W=canvas.width=window.innerWidth;
+  H=canvas.height=window.innerHeight;
+  stars=Array.from({length:115},()=>({
+    x:Math.random()*W,
+    y:Math.random()*H,
+    r:.4+Math.random()*1.6,
+    op:.08+Math.random()*.8,
+    spd:.008+Math.random()*.014
+  }));
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+
+  ctx.strokeStyle='rgba(94,231,255,.025)';
+  ctx.lineWidth=1;
+  const gs=62;
+  for(let x=0;x<W;x+=gs){
+    ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();
+  }
+  for(let y=0;y<H;y+=gs){
+    ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();
+  }
+
+  stars.forEach(s=>{
+    ctx.fillStyle=`rgba(110,220,255,${s.op})`;
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fill();
+    s.op+=s.spd;
+    if(s.op>1 || s.op<.04)s.spd*=-1;
+  });
+  requestAnimationFrame(draw);
+}
+window.addEventListener('resize',resize);
+resize();draw();
+
+/* ===== FLOATING PARTICLES ===== */
+function spawnParticle(){
+  const p=document.createElement('div');
+  p.className='particle';
+  const size=2+Math.random()*4;
+  const colors=['rgba(94,231,255,.42)','rgba(36,140,255,.30)','rgba(139,124,255,.30)'];
+  const color=colors[Math.floor(Math.random()*colors.length)];
+
+  Object.assign(p.style,{
+    width:size+'px',
+    height:size+'px',
+    background:color,
+    left:Math.random()*100+'vw',
+    animationDuration:(6+Math.random()*8)+'s',
+    animationDelay:Math.random()*3+'s',
+    boxShadow:`0 0 ${size*2}px ${color}`
+  });
+
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),14000);
+}
+setInterval(spawnParticle,850);
+
+/* ===== INSTALL ===== */
+function startDownload(btn,link){
+  if(btn.classList.contains('disabled'))return;
+
+  btn.classList.add('disabled');
+  const fill=btn.querySelector('.progress');
+  const text=btn.querySelector('.btnText');
+  const success=btn.querySelector('.success');
+
+  let pct=0;
+  const iv=setInterval(()=>{
+    pct+=2;
+    fill.style.width=pct+'%';
+    text.innerText=`جاري تجهيز التثبيت... ${pct}%`;
+
+    if(pct>=100){
+      clearInterval(iv);
+      text.style.display='none';
+      success.style.display='inline';
+
+      setTimeout(()=>{
+        window.location.href=link;
+        setTimeout(()=>{
+          window.location.href='https://t.me/atraheeb7/55';
+        },2500);
+      },650);
+    }
+  },35);
+}
+
+/* ===== COPY CODE ===== */
+async function copyCode(){
+  const code=document.getElementById('trialCode').innerText;
+  const btn=document.querySelector('.copy-btn');
+
+  try{
+    await navigator.clipboard.writeText(code);
+  }catch(e){
+    const area=document.createElement('textarea');
+    area.value=code;
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    area.remove();
+  }
+
+  const old=btn.innerText;
+  btn.innerText='✓ تم النسخ';
+  setTimeout(()=>btn.innerText=old,1600);
+}
+</script>
+</body>
+</html>
